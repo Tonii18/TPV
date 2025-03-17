@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -29,6 +31,8 @@ public class Main extends JFrame {
 	private RoundButton desserts;
 	private RoundButton drinks;
 	private RoundButton add;
+	
+	private static List<RoundButton> buttonGroup = new ArrayList();
 
 	/**
 	 * Launch the application.
@@ -169,7 +173,17 @@ public class Main extends JFrame {
 		add.setBounds(21, 515, 100, 85);
 		sideBar.add(add);
 		
+		add.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				AddProduct adding = new AddProduct();
+				adding.setVisible(true);
+			}
+			
+		});
+		
 		buttonsHover();
+		
 		
 	}
 	
@@ -178,7 +192,6 @@ public class Main extends JFrame {
 	// External methods
 	
 	public void buttonsHover() {
-		List<RoundButton> buttonGroup = new ArrayList();
 		buttonGroup.add(entrys);
 		buttonGroup.add(meets);
 		buttonGroup.add(fishes);

@@ -19,6 +19,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import models.Product;
 import operations.Operaciones;
@@ -69,6 +70,9 @@ public class AddProduct extends JFrame {
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		
+		String content = Operaciones.readFile(filePath);
+		list = gson.fromJson(content, new TypeToken<List<Product>>() {}.getType());
 		
 		if(list == null) {
 			list = new ArrayList<>();

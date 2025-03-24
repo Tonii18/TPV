@@ -51,16 +51,24 @@ public class ListProductPanel extends RoundPanel {
 		    @Override
 		    public void actionPerformed(ActionEvent e) {
 		        if (getParent() != null) {
-		            Main.setTotalPrice(Main.getTotalPrice() - price);
-
 		            Main mainFrame = (Main) getTopLevelAncestor();
 		            if (mainFrame != null) {
-		                mainFrame.getResult().setText(String.format("%.2f", Main.getTotalPrice()));
-
+		                // Eliminar este producto del panel de lista
 		                mainFrame.getListProductsPanel().remove(ListProductPanel.this);
 
+		                // Recalcular el precio total sumando los precios de los productos restantes
+		                float newTotal = 0.00F;
+		                for (java.awt.Component comp : mainFrame.getListProductsPanel().getComponents()) {
+		                    if (comp instanceof ListProductPanel) {
+		                        newTotal += ((ListProductPanel) comp).price;
+		                    }
+		                }
+		                Main.setTotalPrice(newTotal);
+		                mainFrame.getResult().setText(String.format("%.2f", newTotal));
+
+		                // Ajustar el tamaño del panel
 		                mainFrame.getListProductsPanel().setPreferredSize(new Dimension(
-		                        mainFrame.getListProductsPanel().getWidth(), 
+		                        mainFrame.getListProductsPanel().getWidth(),
 		                        mainFrame.getListProductsPanel().getComponentCount() * 90));
 
 		                mainFrame.getListProductsPanel().revalidate();
@@ -71,6 +79,7 @@ public class ListProductPanel extends RoundPanel {
 		        }
 		    }
 		});
+
 
 	}
 	

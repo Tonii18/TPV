@@ -58,9 +58,6 @@ public class Main extends JFrame {
 	private RoundButton clean;
 	
 	private static float totalPrice = 0.00F;
-	
-	private RoundButton equals;
-	private RoundButtonImage delete;
 
 	/**
 	 * Launch the application.
@@ -175,27 +172,10 @@ public class Main extends JFrame {
 		 * Code for the calculator
 		 */
 		
-		JPanel keyboard = new JPanel();
+		CalculatorPanel keyboard = new CalculatorPanel();
 		keyboard.setBounds(10, 409, 419, 179);
 		calculator.add(keyboard);
 		keyboard.setLayout(null);
-		
-		equals = new RoundButton("=", 10, 10);
-		equals.setForeground(new Color(255, 255, 255));
-		equals.setFont(new Font("Inter 28pt ExtraBold", Font.PLAIN, 20));
-		equals.setBackground(new Color(0, 122, 255));
-		equals.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		equals.setBorder(null);
-		equals.setBounds(360, 11, 49, 77);
-		keyboard.add(equals);
-		
-		delete = new RoundButtonImage("", 10, 10);
-		delete.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		delete.setBorder(null);
-		delete.setBackground(new Color(255, 166, 0));
-		delete.setIcon(new ImageIcon(getClass().getResource("/eraser.png")));
-		delete.setBounds(360, 91, 49, 77);
-		keyboard.add(delete);
 		
 		RoundPanel menu = new RoundPanel(10, 10);
 		menu.setBounds(528, 130, 725, 621);
@@ -305,7 +285,8 @@ public class Main extends JFrame {
 		clean.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				result.setText(String.format("%.2f", 0.00));
+				totalPrice = 0.00F;
+				result.setText(String.format("%.2f", totalPrice));
 				listProductsPanel.removeAll();
 
 				listProductsPanel.setPreferredSize(new Dimension(listProductsPanel.getWidth(), 0));

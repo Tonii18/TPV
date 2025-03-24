@@ -19,10 +19,12 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import models.Product;
 import operations.Operaciones;
 import roundedComponents.RoundButton;
+import roundedComponents.RoundPanel;
 import roundedComponents.RoundTextField;
 
 public class AddProduct extends JFrame {
@@ -64,11 +66,15 @@ public class AddProduct extends JFrame {
 		setLocationRelativeTo(null);
 		setResizable(false);
 		contentPane = new JPanel();
+		contentPane.setBackground(new Color(70, 70, 70));
 		contentPane.setFont(new Font("Inter 18pt Medium", Font.PLAIN, 15));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		
+		String content = Operaciones.readFile(filePath);
+		list = gson.fromJson(content, new TypeToken<List<Product>>() {}.getType());
 		
 		if(list == null) {
 			list = new ArrayList<>();
@@ -114,7 +120,7 @@ public class AddProduct extends JFrame {
 		contentPane.add(price);
 		
 		JLabel typeLbl = new JLabel("Tipo de producto");
-		typeLbl.setForeground(new Color(11, 47, 86));
+		typeLbl.setForeground(new Color(255, 255, 255));
 		typeLbl.setHorizontalAlignment(SwingConstants.CENTER);
 		typeLbl.setHorizontalTextPosition(SwingConstants.CENTER);
 		typeLbl.setFont(new Font("Inter 24pt ExtraBold", Font.PLAIN, 15));
@@ -124,7 +130,7 @@ public class AddProduct extends JFrame {
 		JLabel nameLbl = new JLabel("Nombre");
 		nameLbl.setHorizontalTextPosition(SwingConstants.CENTER);
 		nameLbl.setHorizontalAlignment(SwingConstants.CENTER);
-		nameLbl.setForeground(new Color(11, 47, 86));
+		nameLbl.setForeground(new Color(255, 255, 255));
 		nameLbl.setFont(new Font("Inter 24pt ExtraBold", Font.PLAIN, 15));
 		nameLbl.setBounds(35, 179, 71, 19);
 		contentPane.add(nameLbl);
@@ -132,7 +138,7 @@ public class AddProduct extends JFrame {
 		JLabel priceLbl = new JLabel("Precio");
 		priceLbl.setHorizontalTextPosition(SwingConstants.CENTER);
 		priceLbl.setHorizontalAlignment(SwingConstants.CENTER);
-		priceLbl.setForeground(new Color(11, 47, 86));
+		priceLbl.setForeground(new Color(255, 255, 255));
 		priceLbl.setFont(new Font("Inter 24pt ExtraBold", Font.PLAIN, 15));
 		priceLbl.setBounds(38, 305, 60, 19);
 		contentPane.add(priceLbl);

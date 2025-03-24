@@ -2,7 +2,9 @@ package views;
 
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,14 +13,26 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import models.Product;
+import operations.Operaciones;
 import roundedComponents.RoundButton;
+import roundedComponents.RoundButtonImage;
 import roundedComponents.RoundPanel;
 
 public class Main extends JFrame {
@@ -31,8 +45,22 @@ public class Main extends JFrame {
 	private RoundButton desserts;
 	private RoundButton drinks;
 	private RoundButton add;
+	private JScrollPane scrollPane;
+	private JPanel productsPanel;
+	private JPanel listProductsPanel;
 	
 	private static List<RoundButton> buttonGroup = new ArrayList();
+	
+	private static String filePath = "files/products.json";
+	private static Gson gson = new Gson();
+	private JTextField result;
+	private RoundButton pay;
+	private RoundButton clean;
+	
+	private static float totalPrice = 0.00F;
+	
+	private RoundButton equals;
+	private RoundButtonImage delete;
 
 	/**
 	 * Launch the application.
@@ -97,10 +125,77 @@ public class Main extends JFrame {
 		calculatorBorder.setLayout(null);
 		
 		RoundPanel calculator = new RoundPanel(10, 10);
+		calculator.setBorder(null);
 		calculator.setBackground(new Color(255, 255, 255));
 		calculator.setBounds(10, 11, 439, 599);
 		calculatorBorder.add(calculator);
 		calculator.setLayout(null);
+		
+		result = new JTextField();
+		result.setBounds(10, 302, 419, 50);
+		result.setFocusable(false);
+		result.setHorizontalAlignment(SwingConstants.RIGHT);
+		result.setFont(new Font("Inter 28pt ExtraBold", Font.PLAIN, 30));
+		result.setBorder(new LineBorder(new Color(155, 155, 155)));
+		result.setText(String.valueOf(0.00));
+		calculator.add(result);
+		result.setColumns(10);
+		
+		pay = new RoundButton("Pagar", 10, 10);
+		pay.setBounds(10, 363, 207, 35);
+		pay.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		pay.setForeground(new Color(255, 255, 255));
+		pay.setFont(new Font("Inter 24pt Black", Font.PLAIN, 20));
+		pay.setBackground(new Color(26, 205, 80));
+		pay.setBorder(null);
+		calculator.add(pay);
+		
+		clean = new RoundButton("Limpiar", 10, 10);
+		clean.setBounds(222, 363, 207, 35);
+		clean.setForeground(new Color(255, 255, 255));
+		clean.setFont(new Font("Inter 24pt Black", Font.PLAIN, 20));
+		clean.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		clean.setBackground(new Color(255, 59, 48));
+		clean.setBorder(null);
+		calculator.add(clean);
+		
+		JScrollPane listViewer = new JScrollPane();
+		listViewer.setBounds(10, 11, 419, 280);
+		listViewer.setBorder(null);
+		listViewer.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		listViewer.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		calculator.add(listViewer);
+		
+		listProductsPanel = new JPanel();
+		listProductsPanel.setBackground(new Color(255, 255, 255));
+		listProductsPanel.setLayout(new BoxLayout(listProductsPanel, BoxLayout.Y_AXIS)); // Vertical layout
+		listViewer.setViewportView(listProductsPanel);  // Attach products panel to scroll
+		
+		/*
+		 * Code for the calculator
+		 */
+		
+		JPanel keyboard = new JPanel();
+		keyboard.setBounds(10, 409, 419, 179);
+		calculator.add(keyboard);
+		keyboard.setLayout(null);
+		
+		equals = new RoundButton("=", 10, 10);
+		equals.setForeground(new Color(255, 255, 255));
+		equals.setFont(new Font("Inter 28pt ExtraBold", Font.PLAIN, 20));
+		equals.setBackground(new Color(0, 122, 255));
+		equals.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		equals.setBorder(null);
+		equals.setBounds(360, 11, 49, 77);
+		keyboard.add(equals);
+		
+		delete = new RoundButtonImage("", 10, 10);
+		delete.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		delete.setBorder(null);
+		delete.setBackground(new Color(255, 166, 0));
+		delete.setIcon(new ImageIcon(getClass().getResource("/eraser.png")));
+		delete.setBounds(360, 91, 49, 77);
+		keyboard.add(delete);
 		
 		RoundPanel menu = new RoundPanel(10, 10);
 		menu.setBounds(528, 130, 725, 621);
@@ -173,6 +268,16 @@ public class Main extends JFrame {
 		add.setBounds(21, 515, 100, 85);
 		sideBar.add(add);
 		
+		scrollPane = new JScrollPane();
+		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane.setBounds(153, 11, 562, 599);
+		menu.add(scrollPane);
+		
+		productsPanel = new JPanel();
+		productsPanel.setLayout(new BoxLayout(productsPanel, BoxLayout.Y_AXIS)); // Vertical layout
+		scrollPane.setViewportView(productsPanel);  // Attach products panel to scroll
+		
 		add.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -184,12 +289,88 @@ public class Main extends JFrame {
 		
 		buttonsHover();
 		
+		for(RoundButton rb: buttonGroup) {
+			rb.addActionListener(new ActionListener() {
+				
+				Color bck = rb.getBackground();
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					showProducts(rb.getText(), bck);
+				}
+				
+			});
+		}
+		
+		clean.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				result.setText(String.format("%.2f", 0.00));
+				listProductsPanel.removeAll();
+
+				listProductsPanel.setPreferredSize(new Dimension(listProductsPanel.getWidth(), 0));
+
+				listProductsPanel.revalidate();
+				listProductsPanel.repaint();
+			}
+
+		});
+		
 		
 	}
 	
 	// Private class for buttons
 	
 	// External methods
+	
+	public void showProducts(String section, Color backgorund) {
+		String content = Operaciones.readFile(filePath);
+		List<Product> newList;
+		if(content == null) {
+			newList = new ArrayList<>();
+		}else {
+			newList = gson.fromJson(content, new TypeToken<List<Product>>() {}.getType());
+			if (newList == null) {
+				newList = new ArrayList<>();
+		    }
+		}
+		
+		productsPanel.removeAll();
+		productsPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10)); // Espaciado entre productos
+		
+		listProductsPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
+	    
+		for(Product p: newList) {
+			if(p.getType().equalsIgnoreCase(section)) {
+				ProductPanel pp = new ProductPanel(p.getName());
+				pp.setBackground(backgorund);
+				productsPanel.add(pp);
+				
+				pp.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						totalPrice += p.getPrice();
+				        result.setText(String.format("%.2f", totalPrice));
+
+				        ListProductPanel lpp = new ListProductPanel(p.getName(), p.getPrice());
+				        listProductsPanel.add(lpp);
+
+				        listProductsPanel.setPreferredSize(new Dimension(listProductsPanel.getWidth(), listProductsPanel.getComponentCount() * 90));
+
+				        listProductsPanel.revalidate();
+				        listProductsPanel.repaint();
+					}
+					
+				});
+			}
+		}
+		
+		int panelHeight = Math.max(newList.size() * 90, scrollPane.getHeight());
+		productsPanel.setPreferredSize(new Dimension(scrollPane.getWidth() - 20, panelHeight));
+		
+		productsPanel.revalidate();
+		productsPanel.repaint();
+	}
 	
 	public void buttonsHover() {
 		buttonGroup.add(entrys);
@@ -219,4 +400,23 @@ public class Main extends JFrame {
 			});
 		}
 	}
+
+	public static float getTotalPrice() {
+		return totalPrice;
+	}
+
+	public static void setTotalPrice(float totalPrice) {
+		Main.totalPrice = totalPrice;
+	}
+
+	public JTextField getResult() {
+		return result;
+	}
+
+	public void setResult(JTextField result) {
+		this.result = result;
+	}
+	
+	
+	
 }

@@ -55,7 +55,7 @@ public class Main extends JFrame {
 	 */
 	public Main() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1300, 820);
+		setBounds(100, 100, 1300, 802);
 		setLocationRelativeTo(null);
 		setResizable(false);
 		contentPane = new JPanel();

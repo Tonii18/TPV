@@ -47,6 +47,15 @@ public class ListProductPanel extends RoundPanel {
 		delete.setIcon(new ImageIcon(getClass().getResource("/delete.png")));
 		add(delete);
 		
+		delete.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				Main.setTotalPrice(Main.getTotalPrice() - price);
+			}
+		});
+		
 	}
 	
 }

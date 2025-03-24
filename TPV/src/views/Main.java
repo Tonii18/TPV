@@ -15,6 +15,7 @@ import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -23,6 +24,7 @@ import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -30,10 +32,8 @@ import com.google.gson.reflect.TypeToken;
 import models.Product;
 import operations.Operaciones;
 import roundedComponents.RoundButton;
+import roundedComponents.RoundButtonImage;
 import roundedComponents.RoundPanel;
-import roundedComponents.RoundTextField;
-import javax.swing.border.LineBorder;
-import javax.swing.JButton;
 
 public class Main extends JFrame {
 
@@ -58,6 +58,9 @@ public class Main extends JFrame {
 	private RoundButton clean;
 	
 	private static float totalPrice = 0.00F;
+	
+	private RoundButton equals;
+	private RoundButtonImage delete;
 
 	/**
 	 * Launch the application.
@@ -129,44 +132,70 @@ public class Main extends JFrame {
 		calculator.setLayout(null);
 		
 		result = new JTextField();
+		result.setBounds(10, 302, 419, 50);
 		result.setFocusable(false);
 		result.setHorizontalAlignment(SwingConstants.RIGHT);
 		result.setFont(new Font("Inter 28pt ExtraBold", Font.PLAIN, 30));
 		result.setBorder(new LineBorder(new Color(155, 155, 155)));
 		result.setText(String.valueOf(0.00));
-		result.setBounds(10, 320, 419, 50);
 		calculator.add(result);
 		result.setColumns(10);
 		
 		pay = new RoundButton("Pagar", 10, 10);
+		pay.setBounds(10, 363, 207, 35);
 		pay.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		pay.setForeground(new Color(255, 255, 255));
 		pay.setFont(new Font("Inter 24pt Black", Font.PLAIN, 20));
 		pay.setBackground(new Color(26, 205, 80));
 		pay.setBorder(null);
-		pay.setBounds(10, 381, 207, 35);
 		calculator.add(pay);
 		
 		clean = new RoundButton("Limpiar", 10, 10);
+		clean.setBounds(222, 363, 207, 35);
 		clean.setForeground(new Color(255, 255, 255));
 		clean.setFont(new Font("Inter 24pt Black", Font.PLAIN, 20));
 		clean.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		clean.setBackground(new Color(255, 59, 48));
 		clean.setBorder(null);
-		clean.setBounds(222, 381, 207, 35);
 		calculator.add(clean);
 		
 		JScrollPane listViewer = new JScrollPane();
+		listViewer.setBounds(10, 11, 419, 280);
 		listViewer.setBorder(null);
 		listViewer.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		listViewer.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		listViewer.setBounds(10, 11, 419, 298);
 		calculator.add(listViewer);
 		
 		listProductsPanel = new JPanel();
 		listProductsPanel.setBackground(new Color(255, 255, 255));
 		listProductsPanel.setLayout(new BoxLayout(listProductsPanel, BoxLayout.Y_AXIS)); // Vertical layout
 		listViewer.setViewportView(listProductsPanel);  // Attach products panel to scroll
+		
+		/*
+		 * Code for the calculator
+		 */
+		
+		JPanel keyboard = new JPanel();
+		keyboard.setBounds(10, 409, 419, 179);
+		calculator.add(keyboard);
+		keyboard.setLayout(null);
+		
+		equals = new RoundButton("=", 10, 10);
+		equals.setForeground(new Color(255, 255, 255));
+		equals.setFont(new Font("Inter 28pt ExtraBold", Font.PLAIN, 20));
+		equals.setBackground(new Color(0, 122, 255));
+		equals.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		equals.setBorder(null);
+		equals.setBounds(360, 11, 49, 77);
+		keyboard.add(equals);
+		
+		delete = new RoundButtonImage("", 10, 10);
+		delete.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		delete.setBorder(null);
+		delete.setBackground(new Color(255, 166, 0));
+		delete.setIcon(new ImageIcon(getClass().getResource("/eraser.png")));
+		delete.setBounds(360, 91, 49, 77);
+		keyboard.add(delete);
 		
 		RoundPanel menu = new RoundPanel(10, 10);
 		menu.setBounds(528, 130, 725, 621);
@@ -323,7 +352,7 @@ public class Main extends JFrame {
 						totalPrice += p.getPrice();
 				        result.setText(String.format("%.2f", totalPrice));
 
-				        ListProductPanel lpp = new ListProductPanel(p.getName());
+				        ListProductPanel lpp = new ListProductPanel(p.getName(), p.getPrice());
 				        listProductsPanel.add(lpp);
 
 				        listProductsPanel.setPreferredSize(new Dimension(listProductsPanel.getWidth(), listProductsPanel.getComponentCount() * 90));
@@ -371,4 +400,23 @@ public class Main extends JFrame {
 			});
 		}
 	}
+
+	public static float getTotalPrice() {
+		return totalPrice;
+	}
+
+	public static void setTotalPrice(float totalPrice) {
+		Main.totalPrice = totalPrice;
+	}
+
+	public JTextField getResult() {
+		return result;
+	}
+
+	public void setResult(JTextField result) {
+		this.result = result;
+	}
+	
+	
+	
 }

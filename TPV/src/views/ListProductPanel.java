@@ -48,14 +48,30 @@ public class ListProductPanel extends RoundPanel {
 		add(delete);
 		
 		delete.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				Main.setTotalPrice(Main.getTotalPrice() - price);
-			}
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		        if (getParent() != null) {
+		            Main.setTotalPrice(Main.getTotalPrice() - price);
+
+		            Main mainFrame = (Main) getTopLevelAncestor();
+		            if (mainFrame != null) {
+		                mainFrame.getResult().setText(String.format("%.2f", Main.getTotalPrice()));
+
+		                mainFrame.getListProductsPanel().remove(ListProductPanel.this);
+
+		                mainFrame.getListProductsPanel().setPreferredSize(new Dimension(
+		                        mainFrame.getListProductsPanel().getWidth(), 
+		                        mainFrame.getListProductsPanel().getComponentCount() * 90));
+
+		                mainFrame.getListProductsPanel().revalidate();
+		                mainFrame.getListProductsPanel().repaint();
+		                mainFrame.getListViewer().revalidate();
+		                mainFrame.getListViewer().repaint();
+		            }
+		        }
+		    }
 		});
-		
+
 	}
 	
 }

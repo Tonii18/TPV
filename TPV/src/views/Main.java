@@ -416,7 +416,17 @@ public class Main extends JFrame {
 	public void setResult(JTextField result) {
 		this.result = result;
 	}
+
+	public JPanel getListProductsPanel() {
+		return listProductsPanel;
+	}
+
+	public void setListProductsPanel(JPanel listProductsPanel) {
+		this.listProductsPanel = listProductsPanel;
+	}
 	
-	
+	public JScrollPane getListViewer() {
+	    return scrollPane; // Este es el JScrollPane que contiene `listProductsPanel`
+	}
 	
 }

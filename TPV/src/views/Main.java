@@ -137,7 +137,7 @@ public class Main extends JFrame {
 		result.setHorizontalAlignment(SwingConstants.RIGHT);
 		result.setFont(new Font("Inter 28pt ExtraBold", Font.PLAIN, 30));
 		result.setBorder(new LineBorder(new Color(155, 155, 155)));
-		result.setText(String.valueOf(0.00));
+		result.setText(String.valueOf(totalPrice));
 		calculator.add(result);
 		result.setColumns(10);
 		

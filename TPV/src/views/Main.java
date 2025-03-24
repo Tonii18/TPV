@@ -305,7 +305,8 @@ public class Main extends JFrame {
 		clean.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				result.setText(String.format("%.2f", 0.00));
+				totalPrice = 0.00F;
+				result.setText(String.format("%.2f", totalPrice));
 				listProductsPanel.removeAll();
 
 				listProductsPanel.setPreferredSize(new Dimension(listProductsPanel.getWidth(), 0));

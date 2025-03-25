@@ -14,10 +14,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BoxLayout;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -134,7 +136,7 @@ public class Main extends JFrame {
 		result.setHorizontalAlignment(SwingConstants.RIGHT);
 		result.setFont(new Font("Inter 28pt ExtraBold", Font.PLAIN, 30));
 		result.setBorder(new LineBorder(new Color(155, 155, 155)));
-		result.setText(String.valueOf(0.00));
+		result.setText(String.valueOf(totalPrice));
 		calculator.add(result);
 		result.setColumns(10);
 		
@@ -172,7 +174,7 @@ public class Main extends JFrame {
 		 * Code for the calculator
 		 */
 		
-		CalculatorPanel keyboard = new CalculatorPanel();
+		CalculatorPanel keyboard = new CalculatorPanel(this);
 		keyboard.setBounds(10, 409, 419, 179);
 		calculator.add(keyboard);
 		keyboard.setLayout(null);
@@ -297,12 +299,32 @@ public class Main extends JFrame {
 
 		});
 		
+		pay.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showMessageDialog(null, "Has realizado el pago correctamente!", "Pago exitoso", JOptionPane.INFORMATION_MESSAGE, getIcon("/comprobado.png", 40, 40));
+				totalPrice = 0.00F;
+				result.setText(String.format("%.2f", totalPrice));
+				listProductsPanel.removeAll();
+
+				listProductsPanel.setPreferredSize(new Dimension(listProductsPanel.getWidth(), 0));
+
+				listProductsPanel.revalidate();
+				listProductsPanel.repaint();
+			}
+
+		});
+		
 		
 	}
 	
 	// Private class for buttons
 	
 	// External methods
+	
+	public Icon getIcon(String path, int w, int h) {
+		return new ImageIcon(new ImageIcon(getClass().getResource(path)).getImage().getScaledInstance(w, h, 0));
+	}
 	
 	public void showProducts(String section, Color backgorund) {
 		String content = Operaciones.readFile(filePath);

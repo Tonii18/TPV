@@ -6,6 +6,7 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +39,7 @@ public class AddProduct extends JFrame {
 	
 	private static List<Product> list;
 	private static Gson gson = new Gson();
-	private static String filePath = "files/products.json";
+	private static String filePath = new File("files/products.json").getAbsolutePath();
 
 	/**
 	 * Launch the application.

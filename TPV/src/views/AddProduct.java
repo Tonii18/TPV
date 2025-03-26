@@ -39,7 +39,7 @@ public class AddProduct extends JFrame {
 	
 	private static List<Product> list;
 	private static Gson gson = new Gson();
-	private static String filePath = "C:\\Users\\ajsan\\git\\TPV\\TPV\\files\\products.json";
+	private static String filePath = "files/products.json";
 
 	/**
 	 * Launch the application.

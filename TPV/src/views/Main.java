@@ -52,7 +52,7 @@ public class Main extends JFrame {
 	
 	private static List<RoundButton> buttonGroup = new ArrayList();
 	
-	private static String filePath = "C:\\Users\\ajsan\\git\\TPV\\TPV\\files\\products.json";
+	private static String filePath = "files/products.json";
 	private static Gson gson = new Gson();
 	private JTextField result;
 	private RoundButton pay;

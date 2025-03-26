@@ -10,13 +10,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -34,7 +34,6 @@ import com.google.gson.reflect.TypeToken;
 import models.Product;
 import operations.Operaciones;
 import roundedComponents.RoundButton;
-import roundedComponents.RoundButtonImage;
 import roundedComponents.RoundPanel;
 
 public class Main extends JFrame {
@@ -53,7 +52,7 @@ public class Main extends JFrame {
 	
 	private static List<RoundButton> buttonGroup = new ArrayList();
 	
-	private static String filePath = "files/products.json";
+	private static String filePath = new File("files/products.json").getAbsolutePath();
 	private static Gson gson = new Gson();
 	private JTextField result;
 	private RoundButton pay;

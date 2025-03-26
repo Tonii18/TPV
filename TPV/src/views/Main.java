@@ -85,6 +85,10 @@ public class Main extends JFrame {
 		setBounds(100, 100, 1300, 802);
 		setLocationRelativeTo(null);
 		setResizable(false);
+		
+		ImageIcon icon = new ImageIcon(getClass().getResource("/tpv.png"));
+		setIconImage(icon.getImage());
+		
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(255, 255, 255));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
